@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to CSV Converter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Text to CSV Converter</h1>
+            <input type="file" id="fileInput" accept=".txt">
+        </header>
+        
+        <main>
+            <div class="processing-section">
+                <div class="current-line" id="currentLine">
+                    <!-- Current tokens will be inserted here -->
+                </div>
+                <div class="next-lines" id="nextLines">
+                    <!-- Next 2 lines will be shown here -->
+                </div>
+                
+                <div class="token-controls">
+                    <button class="case-btn" data-case="lower">lowercase</button>
+                    <button class="case-btn" data-case="upper">UPPERCASE</button>
+                    <button class="case-btn" data-case="title">Title Case</button>
+                    <button id="discardBtn">Discard Token</button>
+                </div>
+                
+                <div class="action-fields">
+                    <div class="field">
+                        <label>Description:</label>
+                        <input type="text" id="descriptionField">
+                        <button class="grab-btn" data-field="descriptionField">Grab</button>
+                    </div>
+                    <div class="field">
+                        <label>Amount:</label>
+                        <input type="text" id="amountField">
+                        <button class="grab-btn" data-field="amountField">Grab</button>
+                    </div>
+                    <div class="field">
+                        <label>Tag:</label>
+                        <input type="text" id="tagField">
+                        <button class="grab-btn" data-field="tagField">Grab</button>
+                    </div>
+                    <div class="field">
+                        <label>Payment:</label>
+                        <div class="input-with-dropdown">
+                            <input type="text" id="paymentField" list="paymentSuggestions">
+                            <datalist id="paymentSuggestions"></datalist>
+                        </div>
+                        <button class="grab-btn" data-field="paymentField">Grab</button>
+                    </div>
+                    <div class="field">
+                        <label>Date:</label>
+                        <input type="text" id="dateField">
+                        <button class="grab-btn" data-field="dateField">Grab</button>
+                    </div>
+                    <button id="validateBtn">Validate Entry</button>
+                </div>
+            </div>
+
+            <div class="sidebar-sections">
+                <div class="to-process">
+                    <h3>Remaining Text to Process (<span id="lineCounter">0</span> lines)</h3>
+                    <div id="remainingText"></div>
+                </div>
+
+                <div class="payment-types">
+                    <h3>Payment Types</h3>
+                    <div class="add-payment">
+                        <input type="text" id="newPaymentType" placeholder="New payment type">
+                        <button id="addPaymentBtn">Add</button>
+                    </div>
+                    <div class="payment-table">
+                        <table id="paymentTable">
+                            <thead>
+                                <tr>
+                                    <th>Payment Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Payment types will be listed here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="replacements">
+                    <h3>Text Replacements</h3>
+                    <div class="replacements-list" id="replacementsList">
+                        <!-- Replacements will be listed here -->
+                    </div>
+                    <button id="clearReplacements">Clear Replacements</button>
+                </div>
+            </div>
+        </main>
+
+        <div class="processed-section">
+            <h3>Processed Entries</h3>
+            <div class="table-container">
+                <table id="csvTable">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Tag</th>
+                            <th>Payment</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Processed entries will go here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="export-controls">
+                <button id="downloadCsv">Download CSV</button>
+                <button id="copyToClipboard">Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
