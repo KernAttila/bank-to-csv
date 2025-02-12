@@ -7,6 +7,7 @@ class TextProcessor {
         this.processedEntries = [];
         this.textReplacements = new Map();
         this.paymentTypes = new Set();
+        this.tagTypes = new Set();
         
         // Load saved data
         this.loadSavedData();
@@ -26,7 +27,9 @@ class TextProcessor {
             replacementsList: document.getElementById('replacementsList'),
             clearReplacementsBtn: document.getElementById('clearReplacements'),
             paymentSuggestions: document.getElementById('paymentSuggestions'),
+            tagSuggestions: document.getElementById('tagSuggestions'),
             paymentTable: document.getElementById('paymentTable'),
+            replacementsTable: document.getElementById('replacementsTable'),
             addPaymentBtn: document.getElementById('addPaymentBtn')
         };
 
@@ -54,11 +57,17 @@ class TextProcessor {
         if (savedPaymentTypes) {
             this.paymentTypes = new Set(JSON.parse(savedPaymentTypes));
         }
+
+        const savedTagTypes = localStorage.getItem('tagTypes');
+        if (savedTagTypes) {
+            this.tagTypes = new Set(JSON.parse(savedTagTypes));
+        }
     }
 
     saveData() {
         localStorage.setItem('textReplacements', JSON.stringify([...this.textReplacements]));
         localStorage.setItem('paymentTypes', JSON.stringify([...this.paymentTypes]));
+        localStorage.setItem('tagTypes', JSON.stringify([...this.tagTypes]));
     }
 
     setupEventListeners() {
@@ -102,6 +111,11 @@ class TextProcessor {
             this.updatePaymentSuggestions();
         });
 
+        // Add tag field focus handling
+        this.fields.tagField.addEventListener('focus', () => {
+            this.updateTagSuggestions();
+        });
+
         // Add payment type handling
         this.elements.addPaymentBtn.addEventListener('click', () => {
             const newPayment = document.getElementById('newPaymentType').value.trim();
@@ -121,6 +135,15 @@ class TextProcessor {
             const option = document.createElement('option');
             option.value = type;
             this.elements.paymentSuggestions.appendChild(option);
+        });
+    }
+
+    updateTagSuggestions() {
+        this.elements.tagSuggestions.innerHTML = '';
+        [...this.tagTypes].forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            this.elements.tagSuggestions.appendChild(option);
         });
     }
 
@@ -150,15 +173,16 @@ class TextProcessor {
     }
 
     updateReplacementsDisplay() {
-        this.elements.replacementsList.innerHTML = '';
+        const tbody = this.elements.replacementsTable.querySelector('tbody');
+        tbody.innerHTML = '';
         for (const [original, replacement] of this.textReplacements) {
-            const div = document.createElement('div');
-            div.className = 'replacement-item';
-            div.innerHTML = `
-                <span>"${original}" → "${replacement}"</span>
-                <button onclick="textProcessor.removeReplacement('${original}')">Remove</button>
-            `;
-            this.elements.replacementsList.appendChild(div);
+            const row = tbody.insertRow();
+            const cell1 = row.insertCell();
+            const cell2 = row.insertCell();
+            const cell3 = row.insertCell();
+            cell1.textContent = original;
+            cell2.textContent = replacement;
+            cell3.innerHTML = `<button onclick="textProcessor.removeReplacement('${original}')">Remove</button>`;
         }
     }
 
@@ -324,9 +348,23 @@ class TextProcessor {
             date: this.formatDate(this.fields.dateField.value)
         };
 
+        // Save payment type if it exists
+        if (entry.payment) {
+            this.paymentTypes.add(entry.payment);
+            this.updatePaymentTable();
+            this.updatePaymentSuggestions();
+        }
+
+        // Save tag if it exists
+        if (entry.tag) {
+            this.tagTypes.add(entry.tag);
+            this.updateTagSuggestions();
+        }
+
         this.processedEntries.push(entry);
         this.addEntryToTable(entry);
         this.clearFields();
+        this.saveData();
     }
 
     addEntryToTable(entry) {

@@ -14,13 +14,52 @@
         </header>
         
         <main>
+            <div class="sidebar-sections">
+                <div class="to-process">
+                    <h3>Remaining Text to Process (<span id="lineCounter">0</span> lines)</h3>
+                    <div id="remainingText"></div>
+                </div>
+
+                <div class="payment-types">
+                    <h3>Payment Types</h3>
+                    <div class="add-payment">
+                        <input type="text" id="newPaymentType" placeholder="New payment type">
+                        <button id="addPaymentBtn">Add</button>
+                    </div>
+                    <div class="payment-table">
+                        <table id="paymentTable">
+                            <thead>
+                                <tr>
+                                    <th>Payment Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="replacements">
+                    <h3>Text Replacements</h3>
+                    <div class="replacements-table">
+                        <table id="replacementsTable">
+                            <thead>
+                                <tr>
+                                    <th>Original</th>
+                                    <th>Replacement</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <button id="clearReplacements">Clear Replacements</button>
+                </div>
+            </div>
+
             <div class="processing-section">
-                <div class="current-line" id="currentLine">
-                    <!-- Current tokens will be inserted here -->
-                </div>
-                <div class="next-lines" id="nextLines">
-                    <!-- Next 2 lines will be shown here -->
-                </div>
+                <div class="current-line" id="currentLine"></div>
+                <div class="next-lines" id="nextLines"></div>
                 
                 <div class="token-controls">
                     <button class="case-btn" data-case="lower">lowercase</button>
@@ -42,7 +81,10 @@
                     </div>
                     <div class="field">
                         <label>Tag:</label>
-                        <input type="text" id="tagField">
+                        <div class="input-with-dropdown">
+                            <input type="text" id="tagField" list="tagSuggestions">
+                            <datalist id="tagSuggestions"></datalist>
+                        </div>
                         <button class="grab-btn" data-field="tagField">Grab</button>
                     </div>
                     <div class="field">
@@ -61,42 +103,6 @@
                     <button id="validateBtn">Validate Entry</button>
                 </div>
             </div>
-
-            <div class="sidebar-sections">
-                <div class="to-process">
-                    <h3>Remaining Text to Process (<span id="lineCounter">0</span> lines)</h3>
-                    <div id="remainingText"></div>
-                </div>
-
-                <div class="payment-types">
-                    <h3>Payment Types</h3>
-                    <div class="add-payment">
-                        <input type="text" id="newPaymentType" placeholder="New payment type">
-                        <button id="addPaymentBtn">Add</button>
-                    </div>
-                    <div class="payment-table">
-                        <table id="paymentTable">
-                            <thead>
-                                <tr>
-                                    <th>Payment Type</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Payment types will be listed here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="replacements">
-                    <h3>Text Replacements</h3>
-                    <div class="replacements-list" id="replacementsList">
-                        <!-- Replacements will be listed here -->
-                    </div>
-                    <button id="clearReplacements">Clear Replacements</button>
-                </div>
-            </div>
         </main>
 
         <div class="processed-section">
@@ -112,9 +118,7 @@
                             <th>Date</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Processed entries will go here -->
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
             <div class="export-controls">
