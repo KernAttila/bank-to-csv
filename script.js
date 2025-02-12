@@ -394,7 +394,7 @@ class TextProcessor {
         // Wait for fade out, then update content
         setTimeout(() => {
             // Create new content
-            const newContent = this.lines.slice(1, 6).reverse()
+            const newContent = this.lines.slice(1, 12).reverse()
                 .map((line, index, arr) => `<div class="line">> ${line}</div>`)
                 .join('');
                 
@@ -514,9 +514,58 @@ class TextProcessor {
 
     addEntryToTable(entry) {
         const row = this.elements.csvTable.insertRow();
-        Object.values(entry).forEach(value => {
+        Object.values(entry).forEach((value, index) => {
             const cell = row.insertCell();
-            cell.textContent = value;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = value;
+            input.className = 'table-cell-input';
+            
+            // Update processedEntries when input changes
+            input.addEventListener('change', () => {
+                const rowIndex = row.rowIndex - 1; // Subtract 1 for header row
+                const keys = ['description', 'amount', 'tag', 'payment', 'date'];
+                this.processedEntries[rowIndex][keys[index]] = input.value;
+            });
+
+            // Handle keyboard navigation
+            input.addEventListener('keydown', (e) => {
+                const currentCell = e.target;
+                const currentRow = currentCell.parentElement.parentElement;
+                const currentIndex = Array.from(currentRow.cells).findIndex(cell => cell.contains(currentCell));
+                
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    if (e.shiftKey) {
+                        // Move backward
+                        if (currentIndex > 0) {
+                            currentRow.cells[currentIndex - 1].querySelector('input').focus();
+                        } else if (currentRow.rowIndex > 1) { // Skip header row
+                            const prevRow = this.elements.csvTable.rows[currentRow.rowIndex - 1];
+                            prevRow.cells[prevRow.cells.length - 1].querySelector('input').focus();
+                        }
+                    } else {
+                        // Move forward
+                        if (currentIndex < currentRow.cells.length - 1) {
+                            currentRow.cells[currentIndex + 1].querySelector('input').focus();
+                        } else if (currentRow.rowIndex < this.elements.csvTable.rows.length - 1) {
+                            const nextRow = this.elements.csvTable.rows[currentRow.rowIndex + 1];
+                            nextRow.cells[0].querySelector('input').focus();
+                        }
+                    }
+                } else if (e.ctrlKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+                    e.preventDefault();
+                    const targetRowIndex = currentRow.rowIndex + (e.key === 'ArrowUp' ? -1 : 1);
+                    if (targetRowIndex > 0 && targetRowIndex < this.elements.csvTable.rows.length) {
+                        const targetCell = this.elements.csvTable.rows[targetRowIndex].cells[currentIndex];
+                        if (targetCell) {
+                            targetCell.querySelector('input').focus();
+                        }
+                    }
+                }
+            });
+
+            cell.appendChild(input);
         });
     }
 

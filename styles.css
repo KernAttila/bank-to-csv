@@ -386,6 +386,7 @@ input:checked + .slider .moon {
 .next-lines {
     color: grey;
     position: relative;
+    overflow: hidden;
 }
 
 .next-lines::before {
@@ -408,7 +409,7 @@ input:checked + .slider .moon {
 }
 
 .line.fade-out {
-    transform: translateY(15px);
+    transform: translateY(25px);
 }
 
 .token {
@@ -547,4 +548,27 @@ input[type="text"] {
 
 #fileInput {
     margin: 20px 0;
+}
+
+.table-cell-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+.table-cell-input:focus {
+    outline: none;
+    background: var(--bg-primary);
+    box-shadow: var(--neon-glow);
+}
+
+/* Ensure table cells have proper padding for inputs */
+#csvTable td {
+    padding: 8px 12px;
 }
