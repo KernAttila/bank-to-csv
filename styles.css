@@ -12,10 +12,10 @@ main {
 }
 
 .processing-section {
+    grid-column: 1;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    order: 2;  /* Move to right side */
 }
 
 .sidebar-sections {
@@ -25,17 +25,40 @@ main {
     gap: 20px;
 }
 
-.to-process, .payment-types, .replacements {
+.to-process {
+    /*grid-column: 1;*/
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: none;
+}
+
+.payment-types, .replacements {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.current-line {
+.management-sections {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.current-line, .next-lines {
     margin-bottom: 20px;
     padding: 10px;
     min-height: 50px;
     border: 1px solid #eee;
+}
+.next-lines {
+    color: violet;
+    position: relative;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(238, 130, 238, 1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .token {

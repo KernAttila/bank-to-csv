@@ -30,7 +30,9 @@ class TextProcessor {
             tagSuggestions: document.getElementById('tagSuggestions'),
             paymentTable: document.getElementById('paymentTable'),
             replacementsTable: document.getElementById('replacementsTable'),
-            addPaymentBtn: document.getElementById('addPaymentBtn')
+            addPaymentBtn: document.getElementById('addPaymentBtn'),
+            tagTable: document.getElementById('tagTable'),
+            addTagBtn: document.getElementById('addTagBtn')
         };
 
         // Fields for CSV
@@ -127,6 +129,18 @@ class TextProcessor {
                 document.getElementById('newPaymentType').value = '';
             }
         });
+
+        // Add tag type handling
+        this.elements.addTagBtn.addEventListener('click', () => {
+            const newTag = document.getElementById('newTagType').value.trim();
+            if (newTag) {
+                this.tagTypes.add(newTag);
+                this.updateTagTable();
+                this.updateTagSuggestions();
+                this.saveData();
+                document.getElementById('newTagType').value = '';
+            }
+        });
     }
 
     updatePaymentSuggestions() {
@@ -159,10 +173,29 @@ class TextProcessor {
         });
     }
 
+    updateTagTable() {
+        const tbody = this.elements.tagTable.querySelector('tbody');
+        tbody.innerHTML = '';
+        [...this.tagTypes].sort().forEach(tag => {
+            const row = tbody.insertRow();
+            const cell1 = row.insertCell();
+            const cell2 = row.insertCell();
+            cell1.textContent = tag;
+            cell2.innerHTML = `<button onclick="textProcessor.removeTagType('${tag}')">Remove</button>`;
+        });
+    }
+
     removePaymentType(type) {
         this.paymentTypes.delete(type);
         this.updatePaymentTable();
         this.updatePaymentSuggestions();
+        this.saveData();
+    }
+
+    removeTagType(tag) {
+        this.tagTypes.delete(tag);
+        this.updateTagTable();
+        this.updateTagSuggestions();
         this.saveData();
     }
 
@@ -246,8 +279,8 @@ class TextProcessor {
         this.updateTokenDisplay();
         
         // Update next lines preview
-        this.elements.nextLines.innerHTML = this.lines.slice(1, 3)
-            .map(line => `<div class="line">${line}</div>`)
+        this.elements.nextLines.innerHTML = this.lines.slice(0, 4).reverse()
+            .map((line, index, arr) => `<div class="line">>${index === arr.length - 1 ? ' ' : '> '}${line}</div>`)
             .join('');
     }
 
@@ -275,23 +308,13 @@ class TextProcessor {
             value = `${field.value} ${value}`;
         }
         field.dataset.originalValue = value;
-        console.log('original', field.dataset.originalValue);
         
         // Check for replacement
         if (this.textReplacements.has(value)) {
             value = this.textReplacements.get(value);
         }
         
-        // Update field value
         field.value = value;
-        
-        // Special handling for payment field
-        if (fieldId === 'paymentField' && field.value) {
-            this.paymentTypes.add(field.value);
-            this.updatePaymentSuggestions();
-            this.updatePaymentTable();
-            this.saveData();
-        }
 
         // Only update token state if not ctrl-pressed
         if (!isCtrlPressed) {
@@ -358,6 +381,7 @@ class TextProcessor {
         // Save tag if it exists
         if (entry.tag) {
             this.tagTypes.add(entry.tag);
+            this.updateTagTable();
             this.updateTagSuggestions();
         }
 
