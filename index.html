@@ -34,45 +34,45 @@
                 <div class="current-line" id="currentLine"></div>
                 
                 <div class="token-controls">
-                    <button data-case="lower">lowercase</button>
-                    <button data-case="upper">UPPERCASE</button>
-                    <button data-case="title">Title Case</button>
-                    <button id="discardBtn">Discard Token</button>
+                    <button id="discardBtn" title="Alt+0">❌Discard Token <span class="shortcut-number">(0)</span></button>
+                    <button data-case="title" title="Alt+1">Title Case <span class="shortcut-number">(1)</span></button>
+                    <button data-case="lower" title="Alt+2">lowercase <span class="shortcut-number">(2)</span></button>
+                    <button data-case="upper" title="Alt+3">UPPERCASE <span class="shortcut-number">(3)</span></button>
                 </div>
                 
                 <div class="action-fields">
                     <div class="field">
-                        <label>Description:</label>
-                        <input type="text" id="descriptionField">
-                        <button class="grab-btn" data-field="descriptionField">Grab</button>
+                        <label title="Alt+4">Description<span class="shortcut-number">(4)</span>:</label>
+                        <input type="text" id="descriptionField" placeholder="(ctrl + alt + 4)">
+                        <button class="grab-btn" data-field="descriptionField" title="Alt+4">Grab</button>
                     </div>
                     <div class="field">
-                        <label>Amount:</label>
-                        <input type="text" id="amountField">
-                        <button class="grab-btn" data-field="amountField">Grab</button>
+                        <label title="Alt+5">Amount<span class="shortcut-number">(5)</span>:</label>
+                        <input type="text" id="amountField" placeholder="(ctrl + alt + 5)">
+                        <button class="grab-btn" data-field="amountField" title="Alt+5">Grab</button>
                     </div>
                     <div class="field">
-                        <label>Tag:</label>
+                        <label title="Alt+6">Tag<span class="shortcut-number">(6)</span>:</label>
                         <div class="input-with-dropdown">
-                            <input type="text" id="tagField" list="tagSuggestions">
+                            <input type="text" id="tagField" list="tagSuggestions" placeholder="(ctrl + alt + 6)">
                             <datalist id="tagSuggestions"></datalist>
                         </div>
-                        <button class="grab-btn" data-field="tagField">Grab</button>
+                        <button class="grab-btn" data-field="tagField" title="Alt+6">Grab</button>
                     </div>
                     <div class="field">
-                        <label>Payment:</label>
+                        <label title="Alt+7">Payment<span class="shortcut-number">(7)</span>:</label>
                         <div class="input-with-dropdown">
-                            <input type="text" id="paymentField" list="paymentSuggestions">
+                            <input type="text" id="paymentField" list="paymentSuggestions" placeholder="(ctrl + alt + 7)">
                             <datalist id="paymentSuggestions"></datalist>
                         </div>
-                        <button class="grab-btn" data-field="paymentField">Grab</button>
+                        <button class="grab-btn" data-field="paymentField" title="Alt+7">Grab</button>
                     </div>
                     <div class="field">
-                        <label>Date:</label>
-                        <input type="text" id="dateField">
-                        <button class="grab-btn" data-field="dateField">Grab</button>
+                        <label title="Alt+8">Date<span class="shortcut-number">(8)</span>:</label>
+                        <input type="text" id="dateField" placeholder="(ctrl + alt + 8)">
+                        <button class="grab-btn" data-field="dateField" title="Alt+8">Grab</button>
                     </div>
-                    <button id="validateBtn">Validate Entry</button>
+                    <button id="validateBtn" title="Alt+Enter">Validate Entry <span class="shortcut-number">(Enter)</span></button>
                 </div>
             </div>
 
@@ -132,29 +132,29 @@
                     <button id="clearReplacements">Clear Replacements</button>
                 </div>
             </div>
-        </main>
 
-        <div class="processed-section">
-            <h3>Processed Entries</h3>
-            <div class="table-container">
-                <table id="csvTable">
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Amount</th>
-                            <th>Tag</th>
-                            <th>Payment</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+            <div class="processed-section">
+                <h3>Processed Entries</h3>
+                <div class="table-container">
+                    <table id="csvTable">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Tag</th>
+                                <th>Payment</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="export-controls">
+                    <button id="downloadCsv">Download CSV</button>
+                    <button id="copyToClipboard">Copy to Clipboard</button>
+                </div>
             </div>
-            <div class="export-controls">
-                <button id="downloadCsv">Download CSV</button>
-                <button id="copyToClipboard">Copy to Clipboard</button>
-            </div>
-        </div>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>

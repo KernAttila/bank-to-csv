@@ -67,6 +67,8 @@ class TextProcessor {
         // Add these lines to initialize tables
         this.updatePaymentTable();
         this.updateTagTable();
+        this.setupKeyboardShortcuts();
+        this.setupKeyboardFocusShortcuts();
     }
 
     loadSavedData() {
@@ -104,8 +106,8 @@ class TextProcessor {
             btn.addEventListener('click', (e) => this.grabToken(btn.dataset.field, e.ctrlKey));
         });
 
-        // Setup case buttons
-        document.querySelectorAll('.case-btn').forEach(btn => {
+        // Setup case buttons - Fixed implementation
+        document.querySelectorAll('[data-case]').forEach(btn => {
             btn.addEventListener('click', () => this.changeTokenCase(btn.dataset.case));
         });
 
@@ -115,7 +117,7 @@ class TextProcessor {
                 const originalValue = element.dataset.originalValue;
                 console.log('change', element.value);
                 console.log('original', originalValue);
-                if (originalValue && element.value !== originalValue) {
+                if (originalValue && element.value && element.value !== originalValue) {
                     this.addReplacement(originalValue, element.value);
                 }
                 element.dataset.originalValue = '';
@@ -159,6 +161,88 @@ class TextProcessor {
                 this.updateTagSuggestions();
                 this.saveData();
                 document.getElementById('newTagType').value = '';
+            }
+        });
+    }
+
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey && !e.ctrlKey) {
+                switch (e.key) {
+                    case '0': 
+                        e.preventDefault();
+                        this.discardCurrentToken();
+                        break;
+                    case '1':
+                        e.preventDefault();
+                        this.changeTokenCase('title');
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        this.changeTokenCase('lower');
+                        break;
+                    case '3':
+                        e.preventDefault();
+                        this.changeTokenCase('upper');
+                        break;
+                    case '4':
+                        e.preventDefault();
+                        this.grabToken('descriptionField', e.ctrlKey);
+                        break;
+                    case '5':
+                        e.preventDefault();
+                        this.grabToken('amountField', e.ctrlKey);
+                        break;
+                    case '6':
+                        e.preventDefault();
+                        this.grabToken('tagField', e.ctrlKey);
+                        break;
+                    case '7':
+                        e.preventDefault();
+                        this.grabToken('paymentField', e.ctrlKey);
+                        break;
+                    case '8':
+                        e.preventDefault();
+                        this.grabToken('dateField', e.ctrlKey);
+                        break;
+                    case 'Enter':
+                        e.preventDefault();
+                        this.validateEntry();
+                        break;
+                }
+            }
+        });
+    }
+
+    setupKeyboardFocusShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey && e.ctrlKey) {
+                switch (e.key) {
+                    case '0':
+                        e.preventDefault();
+                        document.activeElement.blur();
+                        break;
+                    case '4':
+                        e.preventDefault();
+                        this.fields.descriptionField.focus();
+                        break;
+                    case '5':
+                        e.preventDefault();
+                        this.fields.amountField.focus();
+                        break;
+                    case '6':
+                        e.preventDefault();
+                        this.fields.tagField.focus();
+                        break;
+                    case '7':
+                        e.preventDefault();
+                        this.fields.paymentField.focus();
+                        break;
+                    case '8':
+                        e.preventDefault();
+                        this.fields.dateField.focus();
+                        break;
+                }
             }
         });
     }
@@ -259,7 +343,9 @@ class TextProcessor {
                 newText = token.text.toUpperCase();
                 break;
             case 'title':
-                newText = token.text.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+                newText = token.text.toLowerCase().split(' ').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ');
                 break;
         }
         
@@ -435,7 +521,10 @@ class TextProcessor {
     }
 
     clearFields() {
-        Object.values(this.fields).forEach(field => field.value = '');
+        Object.values(this.fields).forEach(field => {
+            field.value = '';
+            field.dataset.originalValue = '';
+        });
     }
 
     downloadCsv() {
