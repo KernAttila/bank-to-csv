@@ -47,6 +47,10 @@ class TextProcessor {
         this.setupEventListeners();
         this.updateReplacementsDisplay();
         this.updatePaymentSuggestions();
+        
+        // Add these lines to initialize tables
+        this.updatePaymentTable();
+        this.updateTagTable();
     }
 
     loadSavedData() {
