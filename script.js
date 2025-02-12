@@ -278,10 +278,25 @@ class TextProcessor {
         // Update current line tokens
         this.updateTokenDisplay();
         
-        // Update next lines preview
-        this.elements.nextLines.innerHTML = this.lines.slice(0, 4).reverse()
-            .map((line, index, arr) => `<div class="line">>${index === arr.length - 1 ? ' ' : '> '}${line}</div>`)
-            .join('');
+        // Update next lines preview with transition
+        const nextLinesElement = this.elements.nextLines;
+        const oldLines = nextLinesElement.querySelectorAll('.line');
+        
+        // Fade out existing lines
+        oldLines.forEach(line => line.classList.add('fade-out'));
+        
+        // Wait for fade out, then update content
+        setTimeout(() => {
+            // Create new content
+            const newContent = this.lines.slice(1, 6).reverse()
+                .map((line, index, arr) => `<div class="line">> ${line}</div>`)
+                .join('');
+                
+            nextLinesElement.innerHTML = newContent;
+            
+            // Trigger reflow
+            nextLinesElement.offsetHeight;
+        }, 300); // Match the CSS transition duration
     }
 
     updateTokenDisplay() {

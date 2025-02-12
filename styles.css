@@ -53,12 +53,28 @@ main {
     border: 1px solid #eee;
 }
 .next-lines {
-    color: violet;
+    color: grey;
     position: relative;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(238, 130, 238, 1));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+}
+
+.next-lines::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgb(255, 255, 255, 1), rgba(255, 255, 255, 0.25));
+    z-index: 1;
+}
+
+.next-lines .line {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(0);
+}
+
+.line.fade-out {
+    transform: translateY(15px);
 }
 
 .token {
