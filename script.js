@@ -1,3 +1,19 @@
+// Theme switcher
+const themeSwitch = document.getElementById('checkbox');
+const htmlEl = document.documentElement;
+
+// Check for saved theme preference
+const savedTheme = localStorage.getItem('theme') || 'light';
+htmlEl.dataset.theme = savedTheme;
+themeSwitch.checked = savedTheme === 'dark';
+
+// Theme switch handler
+themeSwitch.addEventListener('change', function() {
+    const theme = this.checked ? 'dark' : 'light';
+    htmlEl.dataset.theme = theme;
+    localStorage.setItem('theme', theme);
+});
+
 class TextProcessor {
     constructor() {
         this.lines = [];
